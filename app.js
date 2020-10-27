@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
-const cors = require("cors");
+// const cors = require("cors");
 // const bodyParser = require("body-parser");
 // const multer = require("multer");
 
@@ -16,17 +16,17 @@ const app = express();
 // app.use(multer().single());
 
 //cors settings
-const whitelist = [process.env.FRONT_END];
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
-};
-app.use(cors(corsOptions));
+// const whitelist = [process.env.FRONT_END];
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || whitelist.indexOf(origin) !== -1) {
+//       callback(null, true);
+//     } else {
+//       callback(new Error("Not allowed by CORS"));
+//     }
+//   },
+// };
+// app.use(cors(corsOptions));
 
 //routes
 // app.use(chatRoutes);
