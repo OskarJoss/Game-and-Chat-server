@@ -17,14 +17,6 @@ module.exports = {
       userCounter++;
       console.log(`${socket.username} connected`);
 
-      //temporary test
-      socket.on("test", (data) => {
-        console.log(data.message);
-        io.emit("test", {
-          message: "hello from backend",
-        });
-      });
-
       socket.on("room", roomController);
       socket.on("chat", chatController);
       socket.on("tic-tac-toe", ticTacToeController);
