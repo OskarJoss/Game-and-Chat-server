@@ -20,6 +20,9 @@ module.exports = {
       //temporary test
       socket.on("test", (data) => {
         console.log(data.message);
+        io.emit("test", {
+          message: "hello from backend",
+        });
       });
 
       socket.on("room", roomController);
