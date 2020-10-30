@@ -20,8 +20,9 @@ const ticTacToeController = function (data) {
     };
     gameStates[socket.room] = gameState;
 
-    io.to(socket.room).emit("tic-tac-toe", {
-      action: "update gameState",
+    //both players will send the start game event so respond only to current socket
+    io.to(socket.id).emit("tic-tac-toe", {
+      action: "initial gameState",
       gameState: gameStates[socket.room],
     });
   }
