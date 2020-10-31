@@ -6,61 +6,38 @@ const roomController = function (data) {
   const socket = this;
   const io = require("../socket").getIO();
 
-  let pong;
-  let ticTacToe;
+  let users = [];
 
   if (data.pickedGame === "tic-tac-toe") {
-    ticTacToe = true;
+    users = usersTicTacToe;
   }
   if (data.pickedGame === "pong") {
-    pong = true;
+    users = usersPong;
   }
 
   if (data.action === "join room") {
-    if (pong && usersPong.length === 1 && usersPong[0].connected) {
+    if (users.length === 1 && users[0].connected) {
       //maby check if user is trying to connect with them selves
-      socket.room = usersPong[0].room;
-      //maby push user to users instead and use order for player1/player2
-      usersPong = [];
+      socket.room = users[0].room;
       socket.join(socket.room);
       io.to(socket.room).emit("room", {
         action: "joined room",
-        pickedGame: "pong",
+        pickedGame: data.pickedGame,
       });
       return;
     }
 
-    if (
-      ticTacToe &&
-      usersTicTacToe.length === 1 &&
-      usersTicTacToe[0].connected
-    ) {
-      //maby check if user is trying to connect with them selves
-      socket.room = usersTicTacToe[0].room;
-      //maby push user to users instead and use order for player1/player2
-      usersTicTacToe = [];
-      socket.join(socket.room);
-      io.to(socket.room).emit("room", {
-        action: "joined room",
-        pickedGame: "tic-tac-toe",
-      });
-      return;
-    }
-
-    if (pong) {
-      usersPong = [];
-    }
-    if (ticTacToe) {
-      usersTicTacToe = [];
-    }
+    users = [];
     socket.room = `room${roomCounter}`;
     roomCounter++;
     socket.join(socket.room);
-    if (pong) {
-      usersPong.push(socket);
+    users.push(socket);
+
+    if (data.pickedGame === "tic-tac-toe") {
+      usersTicTacToe = users;
     }
-    if (ticTacToe) {
-      usersTicTacToe.push(socket);
+    if (data.pickedGame === "pong") {
+      usersPong = users;
     }
   }
 };
