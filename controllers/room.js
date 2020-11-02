@@ -22,7 +22,6 @@ const roomController = function (data) {
       socket.join(socket.room);
       io.to(socket.room).emit("room", {
         action: "joined room",
-        pickedGame: data.pickedGame,
       });
       return;
     }

@@ -1,6 +1,7 @@
 const roomController = require("./controllers/room");
 const chatController = require("./controllers/chat");
 const ticTacToeController = require("./controllers/ticTacToe");
+const pongController = require("./controllers/pong");
 const disconnectController = require("./controllers/disconnect");
 
 let io;
@@ -20,6 +21,8 @@ module.exports = {
       socket.on("room", roomController);
       socket.on("chat", chatController);
       socket.on("tic-tac-toe", ticTacToeController);
+      //pong is a reserved eventname
+      socket.on("pong-game", pongController);
       socket.once("disconnect", disconnectController);
     });
 
