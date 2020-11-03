@@ -22,6 +22,24 @@ const pongController = function (data) {
       });
     }
   }
+
+  if (data.action === "pad position") {
+    let otherPlayer;
+    const gameState = gameStates[socket.room];
+
+    //got a problem with gameState being undefined some times
+    if (gameState) {
+      if (socket.id === gameState.playerOne) {
+        otherPlayer = gameState.playerTwo;
+      } else {
+        otherPlayer = gameState.playerOne;
+      }
+      io.to(otherPlayer).emit("pong-game", {
+        action: "opponent pad position",
+        position: data.position,
+      });
+    }
+  }
 };
 
 module.exports = pongController;
