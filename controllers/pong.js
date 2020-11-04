@@ -23,6 +23,17 @@ const pongController = function (data) {
     }
   }
 
+  if (data.action === "ball position") {
+    console.log(data);
+    io.to(socket.room).emit("pong-game", {
+      action: "new ball position",
+      posX: data.posX,
+      posY: data.posY,
+      velX: data.velX,
+      velY: data.velY,
+    });
+  }
+
   if (data.action === "pad position") {
     let otherPlayer;
     const gameState = gameStates[socket.room];
