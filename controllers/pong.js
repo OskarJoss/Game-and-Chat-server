@@ -4,11 +4,13 @@ const pongController = function (data) {
   const socket = this;
   const io = require("../socket").getIO();
 
-  //set ball starting direction in gameState here
   if (data.action === "start game") {
     const alreadySent = gameStates[socket.room];
     //get socket ids from users connected to this room
     const players = Object.keys(io.sockets.adapter.rooms[socket.room].sockets);
+    const velX = Math.round(Math.random()) ? 1 : -1;
+    const velY = Math.round(Math.random()) ? 1 : -1;
+
     const gameState = {
       playerOne: players[0],
       playerTwo: players[1],
@@ -16,8 +18,14 @@ const pongController = function (data) {
         playerOne: 0,
         playerTwo: 0,
       },
+      ballAngle: {
+        velX: velX,
+        velY: velY,
+      },
+      latestPoint: null,
       winner: false,
     };
+
     gameStates[socket.room] = gameState;
 
     if (socket.id === gameState.playerOne) {
@@ -25,7 +33,6 @@ const pongController = function (data) {
     } else {
       socket.opponent = gameState.playerOne;
     }
-
     //send initial gameState to room once
     if (!alreadySent) {
       io.to(socket.room).emit("pong-game", {
@@ -52,15 +59,16 @@ const pongController = function (data) {
     });
   }
 
-  //check for win here
   if (data.action === "lost point") {
     const gameState = gameStates[socket.room];
     let winner;
 
     if (socket.id === gameState.playerOne) {
       gameState.score.playerTwo += 1;
+      gameState.latestPoint = gameState.playerTwo;
     } else {
       gameState.score.playerOne += 1;
+      gameState.latestPoint = gameState.playerOne;
     }
 
     if (gameState.score.playerOne >= 3) {
@@ -69,6 +77,12 @@ const pongController = function (data) {
     if (gameState.score.playerTwo >= 3) {
       gameState.winner = gameState.playerTwo;
     }
+
+    const velX = Math.round(Math.random()) ? 1 : -1;
+    const velY = Math.round(Math.random()) ? 1 : -1;
+    gameState.ballAngle.velX = velX;
+    gameState.ballAngle.velY = velY;
+
     gameStates[socket.room] = gameState;
 
     io.to(socket.room).emit("pong-game", {
