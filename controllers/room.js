@@ -23,6 +23,14 @@ const roomController = function (data) {
       io.to(socket.room).emit("room", {
         action: "joined room",
       });
+
+      users = [];
+      if (data.pickedGame === "tic-tac-toe") {
+        usersTicTacToe = users;
+      }
+      if (data.pickedGame === "pong") {
+        usersPong = users;
+      }
       return;
     }
 
