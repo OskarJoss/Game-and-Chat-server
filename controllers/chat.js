@@ -7,6 +7,7 @@ const chatController = function (data) {
     io.to(socket.room).emit("chat", {
       action: "incoming message",
       message: data.message,
+      sender: socket.id,
     });
   }
 };
