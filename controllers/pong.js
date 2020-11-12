@@ -49,6 +49,7 @@ const pongController = function (data) {
       posY: data.posY,
       velX: data.velX,
       velY: data.velY,
+      sender: socket.id,
     });
   }
 
